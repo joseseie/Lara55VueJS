@@ -35,14 +35,16 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
+                    @if(Auth::check())
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{route('profile',['slug' => Auth::user()->slug])}}">My Profile</a></li>
                     </ul>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @guest
+                        @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
@@ -65,16 +67,30 @@
                                     </li>
                                 </ul>
                             </li>
-                        @endguest
+                        @endif
                     </ul>
                 </div>
             </div>
         </nav>
 
         @yield('content')
+
+        <notification :id="{{Auth::id()}}"></notification>
+
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="/js/app.js"></script>
+
+    {{--Mostrando as notificacaoes--}}
+    <script>
+        @if(Session::has('success'))
+            noty({
+                type: 'success',
+                layout: 'top',
+                text: '{{Session::get('success')}}'
+            });
+        @endif
+    </script>
 </body>
 </html>
